@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	companiesCollection = "users"
+	usersCollection = "users"
 )
 
 type mongoRepository struct {
@@ -21,40 +21,49 @@ func NewMongoRepository(database *mgo.Database) repository.UserRepository {
 	ur := &mongoRepository{
 		database: database,
 	}
-	ur.database.C(companiesCollection).EnsureIndex(mgo.Index{Key: []string{"email"}, Unique: true})
+	ur.database.C(usersCollection).EnsureIndex(mgo.Index{Key: []string{"email"}, Unique: true})
 	return ur
 }
 
-func (m *mongoRepository) Save(company *model.User) (*model.User, error) {
-	if err := m.database.C(companiesCollection).UpdateId(company.ID, company); err != nil {
-		return company, m.database.C(companiesCollection).Insert(company)
+func (m *mongoRepository) Save(user *model.User) (*model.User, error) {
+	if err := m.database.C(usersCollection).UpdateId(user.ID, user); err != nil {
+		return user, m.database.C(usersCollection).Insert(user)
 	}
-	return company, nil
+	return user, nil
 }
 
 func (m *mongoRepository) FindByEmail(email string) (*model.User, error) {
-	var company model.User
-	err := m.database.C(companiesCollection).Find(bson.M{"email": email}).One(&company)
+	var user model.User
+	err := m.database.C(usersCollection).Find(bson.M{"email": email}).One(&user)
 	if err != nil {
 		return nil, err
 	}
-	return &company, nil
+	return &user, nil
 }
 
 func (m *mongoRepository) FindByPasswordResetToken(email string) (*model.User, error) {
-	var company model.User
-	err := m.database.C(companiesCollection).Find(bson.M{"passwordResetToken": email}).One(&company)
+	var user model.User
+	err := m.database.C(usersCollection).Find(bson.M{"passwordResetToken": email}).One(&user)
 	if err != nil {
 		return nil, err
 	}
-	return &company, nil
+	return &user, nil
 }
 
 func (m *mongoRepository) FindByID(id string) (*model.User, error) {
-	var company model.User
-	err := m.database.C(companiesCollection).Find(bson.M{"_id": id}).One(&company)
+	var user model.User
+	err := m.database.C(usersCollection).Find(bson.M{"_id": id}).One(&user)
 	if err != nil {
 		return nil, err
 	}
-	return &company, nil
+	return &user, nil
+}
+
+func (m *mongoRepository) FindAll() ([]*model.User, error) {
+	var users []*model.User
+	err := m.database.C(usersCollection).Find(nil).All(&users)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
 }
