@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>trackpump</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <h1>Hello, {{ .Email }}</h1>
+    <form method="GET" enctype="multipart/form-data" action="/measurement">
+        <p>
+            <input type="hidden" name="token" value="{{ .Authorization }}" />
+        </p>
+        <p>
+            <input type="submit" value="Collect new measurement" style="align-self: center;">
+        </p>
+    </form>
+</body>
+
+</html>

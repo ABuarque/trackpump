@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>trackpump</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <h1>Colect new measurement</h1>
+    <form method="POST" enctype="multipart/form-data" action="/process_measurement">
+        <p>
+            <input type="hidden" name="token" value="{{ .Authorization }}" />
+        </p>
+        <p>
+            <label for="name_content">Weight</label>
+            <input id="name_content" name="weight" required="required" type="text" placeholder="in grams">
+        </p>
+        <p>
+            <label for="name_content">Abdominal Circunference</label>
+            <input id="name_content" name="abdominalCircunference" required="required" type="text" placeholder="in cm">
+        </p>
+        <p>
+            <label for="name_content">Arm</label>
+            <input id="name_content" name="arm" required="required" type="text" placeholder="in cm">
+        </p>
+        <p>
+            <label for="name_content">Forearm</label>
+            <input id="name_content" name="forearm" required="required" type="text" placeholder="in cm">
+        </p>
+        <p>
+            <label for="name_content">Calf</label>
+            <input id="name_content" name="calf" required="required" type="text" placeholder="in cm">
+        </p>
+        <p>
+            <label for="name_content">Neck</label>
+            <input id="name_content" name="neck" required="required" type="text" placeholder="in cm">
+        </p>
+        <p>
+            <label for="name_content">Hip</label>
+            <input id="name_content" name="hip" required="required" type="text" placeholder="in cm">
+        </p>
+        <p>
+            <label for="name_content">Thigh</label>
+            <input id="name_content" name="thigh" required="required" type="text" placeholder="in cm">
+        </p>
+        <p>
+            <label for="name_content">Frontal picture</label>
+            <input type="file" name="frontalPicture" id="file_to_upload" required>
+        </p>
+        <p>
+            <label for="name_content">Side picture</label>
+            <input type="file" name="sidePicture" id="file_to_upload" required>
+        </p>
+        <p>
+            <input type="submit" value="Save" style="align-self: center;">
+        </p>
+    </form>
+</body>
+
+</html>
