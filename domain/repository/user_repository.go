@@ -11,4 +11,6 @@ type UserRepository interface {
 	FindByPasswordResetToken(token string) (*model.User, error)
 
 	Save(u *model.User) (*model.User, error)
+
+	FindAll() ([]*model.User, error)
 }

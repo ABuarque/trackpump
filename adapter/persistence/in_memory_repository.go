@@ -48,3 +48,11 @@ func (im *inMemoryRepository) FindByEmail(email string) (*model.User, error) {
 	}
 	return nil, fmt.Errorf("was not found any user with email %s", email)
 }
+
+func (im *inMemoryRepository) FindAll() ([]*model.User, error) {
+	var users []*model.User
+	for _, user := range im.db {
+		users = append(users, user)
+	}
+	return users, nil
+}

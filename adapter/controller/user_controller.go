@@ -33,6 +33,8 @@ type UserController interface {
 
 	Login(c echo.Context) error
 
+	WeeklyReport(c echo.Context) error
+
 	// Frontend methods
 	HomePage(c echo.Context) error
 
@@ -109,6 +111,19 @@ func (u *userController) Login(c echo.Context) error {
 	}
 	c.Response().Header().Add("Authorization", authorization)
 	return c.JSON(http.StatusCreated, res)
+}
+
+func (u *userController) WeeklyReport(c echo.Context) error {
+	if err := u.useCases.RequestWeeklyReport(); err != nil {
+		var e *exception.Error
+		if errors.As(err, &e) {
+			log.Println(e.Err)
+			return c.JSON(e.Code, e)
+		}
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	log.Println("processing reports")
+	return c.String(http.StatusOK, "processing")
 }
 
 func (u *userController) HomePage(c echo.Context) error {
