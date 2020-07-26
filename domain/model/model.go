@@ -21,14 +21,14 @@ type User struct {
 type BodyMeasurement struct {
 	ID                     string    `bson:"id"`
 	IssuedAt               time.Time `bson:"issuedAt"`
-	Weight                 int       `bson:"weight"`
-	AbdominalCircunference int       `bson:"abdominalCircunference"`
-	Arm                    int       `bson:"arm"`
-	Forearm                int       `bson:"forearm"`
-	Calf                   int       `bson:"calf"`
-	Neck                   int       `bson:"neck"`
-	Hip                    int       `bson:"hip"`
-	Thigh                  int       `bson:"thigh"`
+	Weight                 int       `bson:"weight"`                 // in grams
+	AbdominalCircunference int       `bson:"abdominalCircunference"` // in cm
+	Arm                    int       `bson:"arm"`                    // in cm
+	Forearm                int       `bson:"forearm"`                // in cm
+	Calf                   int       `bson:"calf"`                   // in cm
+	Neck                   int       `bson:"neck"`                   // in cm
+	Hip                    int       `bson:"hip"`                    // in cm
+	Thigh                  int       `bson:"thigh"`                  // in cm
 	FrontalPicture         string    `bson:"frontalPicture"`
 	SidePicture            string    `bson:"sidePicture"`
 }
