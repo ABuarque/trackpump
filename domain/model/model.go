@@ -4,22 +4,22 @@ import "time"
 
 // User is the user struct
 type User struct {
-	ID                 string             `bson:"_id"`
-	Email              string             `bson:"email"`
-	Name               string             `bson:"name"`
-	Password           string             `bson:"password"`
-	PasswordResetToken string             `bson:"passwordResetToken,omitempty"`
-	Gender             int                `bson:"gender"`
-	Birth              time.Time          `bson:"birth"`
-	CreatedAt          time.Time          `bson:"createdAt"`
-	UpdatedAt          time.Time          `bson:"updatedAt"`
-	Height             int                `bson:"height"`
-	Measurements       []*BodyMeasurement `bson:"measurements"`
+	ID                 string    `bson:"_id"`
+	Email              string    `bson:"email"`
+	Name               string    `bson:"name"`
+	Password           string    `bson:"password"`
+	PasswordResetToken string    `bson:"passwordResetToken,omitempty"`
+	Gender             int       `bson:"gender"`
+	Birth              time.Time `bson:"birth"`
+	CreatedAt          time.Time `bson:"createdAt"`
+	UpdatedAt          time.Time `bson:"updatedAt"`
+	Height             int       `bson:"height"`
 }
 
 // BodyMeasurement is data collected on a measurement
 type BodyMeasurement struct {
-	ID                     string    `bson:"id"`
+	ID                     string    `bson:"_id"`
+	UserID                 string    `bson:"userID"`
 	IssuedAt               time.Time `bson:"issuedAt"`
 	Weight                 int       `bson:"weight"`                 // in grams
 	AbdominalCircunference int       `bson:"abdominalCircunference"` // in cm

@@ -13,4 +13,10 @@ type UserRepository interface {
 	Save(u *model.User) (*model.User, error)
 
 	FindAll() ([]*model.User, error)
+
+	SaveMeasurement(measurement *model.BodyMeasurement) (*model.BodyMeasurement, error)
+
+	// The returned list containes only two elements whose are the last and
+	// last but one measurements (ON THAT ORDER!)
+	FindLastTwoMeasurements(userID string) ([]*model.BodyMeasurement, error)
 }

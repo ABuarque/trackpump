@@ -2,18 +2,21 @@ package persistence
 
 import (
 	"fmt"
+	"sort"
 	"trackpump/domain/model"
 	"trackpump/domain/repository"
 )
 
 type inMemoryRepository struct {
-	db map[string]*model.User
+	db                     map[string]*model.User
+	measurementsCollection map[string]*model.BodyMeasurement
 }
 
 // NewInMemoryRepository returns an in memory repository
 func NewInMemoryRepository() repository.UserRepository {
 	return &inMemoryRepository{
-		db: make(map[string]*model.User),
+		db:                     make(map[string]*model.User),
+		measurementsCollection: make(map[string]*model.BodyMeasurement),
 	}
 }
 
@@ -55,4 +58,23 @@ func (im *inMemoryRepository) FindAll() ([]*model.User, error) {
 		users = append(users, user)
 	}
 	return users, nil
+}
+
+func (im *inMemoryRepository) SaveMeasurement(measurement *model.BodyMeasurement) (*model.BodyMeasurement, error) {
+	im.measurementsCollection[measurement.ID] = measurement
+	return measurement, nil
+}
+
+func (im *inMemoryRepository) FindLastTwoMeasurements(userID string) ([]*model.BodyMeasurement, error) {
+	var temporarySlice []*model.BodyMeasurement
+	for _, m := range im.measurementsCollection {
+		temporarySlice = append(temporarySlice, m)
+	}
+	sort.Slice(temporarySlice, func(i, j int) bool {
+		return temporarySlice[i].IssuedAt.After(temporarySlice[j].IssuedAt)
+	})
+	if len(temporarySlice) >= 2 {
+		return []*model.BodyMeasurement{temporarySlice[0], temporarySlice[1]}, nil
+	}
+	return make([]*model.BodyMeasurement, 0), nil
 }

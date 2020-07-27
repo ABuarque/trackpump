@@ -81,6 +81,7 @@ func (r *registerMeasurement) register(input *RegisterMeasurementInput) error {
 		return exception.New(exception.ProcessmentError, "failed to generate user id", err)
 	}
 	bodyMeasurement := model.BodyMeasurement{
+		UserID:                 user.ID,
 		ID:                     id,
 		IssuedAt:               time.Now(),
 		Weight:                 input.Weight,
@@ -94,9 +95,8 @@ func (r *registerMeasurement) register(input *RegisterMeasurementInput) error {
 		FrontalPicture:         frontalPictureURL,
 		SidePicture:            sidePictureURL,
 	}
-	user.Measurements = append(user.Measurements, &bodyMeasurement)
-	if _, err := r.repository.Save(user); err != nil {
-		return exception.New(exception.ProcessmentError, "failed to update user metrics", err)
+	if _, err := r.repository.SaveMeasurement(&bodyMeasurement); err != nil {
+		return exception.New(exception.ProcessmentError, "failed to save user measurement", err)
 	}
 	return nil
 }
