@@ -33,6 +33,8 @@ type UserController interface {
 
 	Login(c echo.Context) error
 
+	RegisterMeasurement(c echo.Context) error
+
 	WeeklyReport(c echo.Context) error
 
 	// Frontend methods
@@ -124,6 +126,32 @@ func (u *userController) WeeklyReport(c echo.Context) error {
 	}
 	log.Println("processing reports")
 	return c.String(http.StatusOK, "processing")
+}
+
+func (u *userController) RegisterMeasurement(c echo.Context) error {
+	token := c.Request().Header.Get("Authorization")
+	if token == "" {
+		return c.String(http.StatusBadRequest, "missing authorization")
+	}
+	tokenClaims, err := auth.GetClaims(token)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "failed to extract claims from request")
+	}
+	userID := tokenClaims["id"]
+	in := usecase.RegisterMeasurementInput{}
+	if err := c.Bind(&in); err != nil {
+		return c.String(http.StatusInternalServerError, "invalid request")
+	}
+	in.ID = userID
+	if err := u.useCases.RegisterMeasurement(&in); err != nil {
+		var e *exception.Error
+		if errors.As(err, &e) {
+			log.Println(e.Err)
+			return c.JSON(e.Code, e)
+		}
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.String(http.StatusOK, "ok")
 }
 
 func (u *userController) HomePage(c echo.Context) error {
