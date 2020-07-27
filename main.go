@@ -46,6 +46,7 @@ func main() {
 	e.POST("/api/v1/users", usersControllers.Create)
 	e.POST("/api/v1/users/login", usersControllers.Login)
 	e.GET("/api/v1/weekly_report", usersControllers.WeeklyReport)
+	e.POST("/api/v1/measurements", usersControllers.RegisterMeasurement)
 	e.GET("/", usersControllers.HomePage)
 	e.GET("/sign_up", usersControllers.SignUp)
 	e.POST("/process_signup", usersControllers.ProcessSignUp)
