@@ -1,6 +1,7 @@
 package persistence
 
 import (
+	"strings"
 	"trackpump/domain/model"
 	"trackpump/domain/repository"
 
@@ -9,7 +10,8 @@ import (
 )
 
 const (
-	usersCollection = "users"
+	usersCollection        = "users"
+	measurementsCollection = "measurements"
 )
 
 type mongoRepository struct {
@@ -66,4 +68,21 @@ func (m *mongoRepository) FindAll() ([]*model.User, error) {
 		return nil, err
 	}
 	return users, nil
+}
+
+func (m *mongoRepository) SaveMeasurement(measurement *model.BodyMeasurement) (*model.BodyMeasurement, error) {
+	if err := m.database.C(measurementsCollection).UpdateId(measurement.ID, measurement); err != nil {
+		return measurement, m.database.C(measurementsCollection).Insert(measurement)
+	}
+	return measurement, nil
+}
+
+func (m *mongoRepository) FindLastTwoMeasurements(userID string) ([]*model.BodyMeasurement, error) {
+	var measurements []*model.BodyMeasurement
+	sortBy := []string{"-issuedAt"}
+	err := m.database.C(measurementsCollection).Find(bson.M{"userID": userID}).Sort(strings.Join(sortBy, ",")).Limit(2).All(&measurements)
+	if err != nil {
+		return nil, err
+	}
+	return measurements, nil
 }

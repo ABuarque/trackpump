@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"fmt"
-	"sort"
+	"log"
 	"strings"
 	"time"
 	"trackpump/domain/model"
@@ -35,19 +35,21 @@ func (rr *requestReport) process() error {
 		return exception.New(exception.ProcessmentError, "failed to retrieve all users from db", err)
 	}
 	for _, user := range users {
-		if len(user.Measurements) >= 2 {
-			sort.Slice(user.Measurements, func(i, j int) bool {
-				return user.Measurements[i].IssuedAt.After(user.Measurements[j].IssuedAt)
-			})
-			lastMeasure := user.Measurements[0]
-			lastButOneMeasure := user.Measurements[1]
+		lastMeasurements, err := rr.repository.FindLastTwoMeasurements(user.ID)
+		if err != nil {
+			log.Printf("error on process for user %s, erro %q", user.ID, err)
+			continue
+		}
+		if len(lastMeasurements) >= 2 {
+			lastMeasure := lastMeasurements[0]
+			lastButOneMeasure := lastMeasurements[1]
 			report, err := getWorkoutReport(lastMeasure, lastButOneMeasure, user.Height, user.Gender, user.Birth)
 			if err != nil {
 				return exception.New(exception.ProcessmentError, fmt.Sprintf("failed to build report, erro %q", err), err)
 			}
 			fmt.Println(report)
-			// TODO send report via email
 		}
+		// TODO send report via email
 	}
 	return nil
 }
