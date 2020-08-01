@@ -48,5 +48,5 @@ jobs:
     - name: Publish app to Google App Engine
       run: |
         gcloud auth activate-service-account ${{ secrets.GCLOUD_SERVICE_ACCOUNT_EMAIL }} --key-file=client-secret.json
-        gcloud config set project candidatosinfodev
+        gcloud config set project ${{ secrets.PROJECT_ID }}
         gcloud -q app deploy app.yaml --promote
