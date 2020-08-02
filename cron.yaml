@@ -1,0 +1,5 @@
+cron:
+- description: "weekly workout report"
+  url: /api/v1/weekly_report
+  schedule: every 10080 minutes
+  
