@@ -1,7 +1,7 @@
 import sys 
 import re
 
-"""This script get DB_HOST, DB_NAME, STORAGE_LOGIN and STORAGE_PASSWORD 
+"""This script get PROJECT_ID, STORAGE_LOGIN and STORAGE_PASSWORD 
 environment variables used on app engine from Github Secrets and
 replace on app.yaml."""
 
