@@ -293,35 +293,35 @@ func (u *userController) ProcessMeasurement(c echo.Context) error {
 	}
 	id := claims["id"]
 	request := c.Request()
-	weight, err := strconv.Atoi(request.FormValue("weight"))
+	weight, err := strconv.ParseFloat(request.FormValue("weight"), 64)
 	if err != nil {
 		return c.HTML(http.StatusOK, fmt.Sprintf("<h1>Error on convert weight: %s</h1>", err.Error()))
 	}
-	abdominalCircunference, err := strconv.Atoi(request.FormValue("abdominalCircunference"))
+	abdominalCircunference, err := strconv.ParseFloat(request.FormValue("abdominalCircunference"), 64)
 	if err != nil {
 		return c.HTML(http.StatusOK, fmt.Sprintf("<h1>Error on convert abdominal circunference: %s</h1>", err.Error()))
 	}
-	arm, err := strconv.Atoi(request.FormValue("arm"))
+	arm, err := strconv.ParseFloat(request.FormValue("arm"), 64)
 	if err != nil {
 		return c.HTML(http.StatusOK, fmt.Sprintf("<h1>Error on convert arm: %s</h1>", err.Error()))
 	}
-	forearm, err := strconv.Atoi(request.FormValue("forearm"))
+	forearm, err := strconv.ParseFloat(request.FormValue("forearm"), 64)
 	if err != nil {
 		return c.HTML(http.StatusOK, fmt.Sprintf("<h1>Error on convert arm: %s</h1>", err.Error()))
 	}
-	calf, err := strconv.Atoi(request.FormValue("calf"))
+	calf, err := strconv.ParseFloat(request.FormValue("calf"), 64)
 	if err != nil {
 		return c.HTML(http.StatusOK, fmt.Sprintf("<h1>Error on convert calf: %s</h1>", err.Error()))
 	}
-	neck, err := strconv.Atoi(request.FormValue("neck"))
+	neck, err := strconv.ParseFloat(request.FormValue("neck"), 64)
 	if err != nil {
 		return c.HTML(http.StatusOK, fmt.Sprintf("<h1>Error on convert neck: %s</h1>", err.Error()))
 	}
-	hip, err := strconv.Atoi(request.FormValue("hip"))
+	hip, err := strconv.ParseFloat(request.FormValue("hip"), 64)
 	if err != nil {
 		return c.HTML(http.StatusOK, fmt.Sprintf("<h1>Error on convert hip: %s</h1>", err.Error()))
 	}
-	thigh, err := strconv.Atoi(request.FormValue("thigh"))
+	thigh, err := strconv.ParseFloat(request.FormValue("thigh"), 64)
 	if err != nil {
 		return c.HTML(http.StatusOK, fmt.Sprintf("<h1>Error on convert thigh: %s</h1>", err.Error()))
 	}

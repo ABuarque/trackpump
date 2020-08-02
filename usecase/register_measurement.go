@@ -13,17 +13,17 @@ import (
 
 // RegisterMeasurementInput is the use case input
 type RegisterMeasurementInput struct {
-	ID                     string `json:"id"`
-	Weight                 int    `json:"weight"`
-	AbdominalCircunference int    `json:"abdominalCircunference"`
-	Arm                    int    `json:"arm"`
-	Forearm                int    `json:"forearm"`
-	Calf                   int    `json:"calf"`
-	Neck                   int    `json:"neck"`
-	Hip                    int    `json:"hip"`
-	Thigh                  int    `json:"thigh"`
-	FrontalPicture         string `json:"frontalPicture"`
-	SidePicture            string `json:"sidePicture"`
+	ID                     string  `json:"id"`
+	Weight                 float64 `json:"weight"`
+	AbdominalCircunference float64 `json:"abdominalCircunference"`
+	Arm                    float64 `json:"arm"`
+	Forearm                float64 `json:"forearm"`
+	Calf                   float64 `json:"calf"`
+	Neck                   float64 `json:"neck"`
+	Hip                    float64 `json:"hip"`
+	Thigh                  float64 `json:"thigh"`
+	FrontalPicture         string  `json:"frontalPicture"`
+	SidePicture            string  `json:"sidePicture"`
 }
 
 type registerMeasurement struct {
