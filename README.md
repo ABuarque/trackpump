@@ -1,6 +1,6 @@
 # trackpump 
 
-![Tests](https://github.com/ABuarque/trackpump/workflows/Tests/badge.svg) ![Codecov](https://codecov.io/gh/ABuarque/trackpump/branch/master/graph/badge.svg?token=Y70u29hwMi) ![Deploy to production](https://github.com/ABuarque/trackpump/workflows/Deploy%20to%20production/badge.svg)
+![Tests](https://github.com/ABuarque/trackpump/workflows/Tests/badge.svg) [![codecov](https://codecov.io/gh/ABuarque/trackpump/branch/master/graph/badge.svg?token=Y2Xqy8YRIV)](https://codecov.io/gh/ABuarque/trackpump) ![Deploy to production](https://github.com/ABuarque/trackpump/workflows/Deploy%20to%20production/badge.svg)
 
 ## Objective
 Create a system to measure workout performance of a bodybuilder as weeks goes by.
