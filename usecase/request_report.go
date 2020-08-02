@@ -59,6 +59,8 @@ func (rr *requestReport) process() error {
 			if err := rr.notification.SendWeeklyReport(&payload); err != nil {
 				log.Printf("failed to send report to email %s\n", user.Email)
 			}
+		} else {
+			log.Printf("user %s does not have 2 measurements yet", user.ID)
 		}
 	}
 	return nil
