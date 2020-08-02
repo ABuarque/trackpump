@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
 	"os"
-	"trackpump/db"
 	"trackpump/storage"
 
+	"cloud.google.com/go/datastore"
 	"github.com/labstack/echo"
 )
 
@@ -15,17 +15,13 @@ func main() {
 	if port == "" {
 		log.Fatal("missing PORT environment variable")
 	}
-	dbHost := os.Getenv("DB_HOST")
-	if dbHost == "" {
-		log.Fatal("missing DB_HOST environment variable")
+	projectID := os.Getenv("PROJECT_ID")
+	if projectID == "" {
+		log.Fatal("missing PROJECT_ID environment variable")
 	}
-	dbName := os.Getenv("DB_NAME")
-	if dbName == "" {
-		log.Fatal("missing DB_NAME environment variable")
-	}
-	db, err := db.New(dbHost, dbName)
+	client, err := datastore.NewClient(context.Background(), projectID)
 	if err != nil {
-		log.Fatal(fmt.Sprintf("failed to start db: %q", err))
+		log.Fatalf("falha ao criar cliente do Datastore, erro %q", err)
 	}
 	log.Println("connected to database")
 	storageLogin := os.Getenv("STORAGE_LOGIN")
@@ -41,7 +37,7 @@ func main() {
 		log.Fatalf("failed to create storage client, erro %q", err)
 	}
 	e := echo.New()
-	userRegistry := NewRegistry(db, storageClient)
+	userRegistry := NewRegistry(client, storageClient)
 	usersControllers := userRegistry.NewAppController()
 	e.POST("/api/v1/users", usersControllers.Create)
 	e.POST("/api/v1/users/login", usersControllers.Login)

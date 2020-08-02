@@ -12,11 +12,11 @@ import (
 	"trackpump/usecase"
 	"trackpump/usecase/service"
 
-	"gopkg.in/mgo.v2"
+	"cloud.google.com/go/datastore"
 )
 
 type registry struct {
-	client        *mgo.Database
+	client        *datastore.Client
 	storageClient *storage.PCloudClient
 	repository    repository.UserRepository
 }
@@ -29,12 +29,12 @@ type Registry interface {
 }
 
 // NewRegistry returns a new registry
-func NewRegistry(client *mgo.Database, storageClient *storage.PCloudClient) Registry {
+func NewRegistry(client *datastore.Client, storageClient *storage.PCloudClient) Registry {
 	var repository repository.UserRepository
 	if client == nil {
 		repository = persistence.NewInMemoryRepository()
 	} else {
-		repository = persistence.NewMongoRepository(client)
+		repository = persistence.NewDatastoreRepository(client)
 	}
 	return &registry{
 		client:        client,
