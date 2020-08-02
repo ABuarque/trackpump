@@ -32,8 +32,8 @@ jobs:
       with: 
         python-version: 3.7
 
-    - name: Config environment variables
-      run: python3 set_env.py ${{ secrets.PROJECT_ID }} ${{ secrets.STORAGE_LOGIN }} ${{ secrets.STORAGE_PASSWORD }}
+    - name: Config app engine environment variables
+      run: python3 set_env.py ${{ secrets.PROJECT_ID }} ${{ secrets.STORAGE_LOGIN }} ${{ secrets.STORAGE_PASSWORD }} ${{ secrets.EMAIL }} ${{ secrets.PASSWORD }}  
 
     - name: Initialize Google Cloud SDK
       uses: zxyle/publish-gae-action@master

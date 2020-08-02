@@ -8,6 +8,7 @@ import (
 	"trackpump/domain/model"
 	"trackpump/domain/repository"
 	"trackpump/usecase/exception"
+	"trackpump/usecase/service"
 )
 
 const (
@@ -16,20 +17,23 @@ const (
 )
 
 type requestReport struct {
-	repository repository.UserRepository
+	repository   repository.UserRepository
+	notification service.Notification
 }
 
 type requestReportUseCase interface {
 	process() error
 }
 
-func newWeeklyWorkoutReport(repository repository.UserRepository) requestReportUseCase {
+func newWeeklyWorkoutReport(repository repository.UserRepository, notification service.Notification) requestReportUseCase {
 	return &requestReport{
-		repository: repository,
+		repository:   repository,
+		notification: notification,
 	}
 }
 
 func (rr *requestReport) process() error {
+	log.Println("starting weekly workout report")
 	users, err := rr.repository.FindAll()
 	if err != nil {
 		return exception.New(exception.ProcessmentError, "failed to retrieve all users from db", err)
@@ -47,9 +51,15 @@ func (rr *requestReport) process() error {
 			if err != nil {
 				return exception.New(exception.ProcessmentError, fmt.Sprintf("failed to build report, erro %q", err), err)
 			}
-			fmt.Println(report)
+			payload := service.WeeklyReportPayload{
+				Email:  user.Email,
+				Name:   user.Name,
+				Report: report,
+			}
+			if err := rr.notification.SendWeeklyReport(&payload); err != nil {
+				log.Printf("failed to send report to email %s\n", user.Email)
+			}
 		}
-		// TODO send report via email
 	}
 	return nil
 }

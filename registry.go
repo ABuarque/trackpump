@@ -4,6 +4,7 @@ import (
 	"trackpump/adapter/controller"
 	"trackpump/adapter/filestorage"
 	"trackpump/adapter/id"
+	"trackpump/adapter/notification"
 	"trackpump/adapter/password"
 	"trackpump/adapter/persistence"
 	"trackpump/auth"
@@ -19,6 +20,8 @@ type registry struct {
 	client        *datastore.Client
 	storageClient *storage.PCloudClient
 	repository    repository.UserRepository
+	email         string
+	password      string
 }
 
 // Registry is an interface
@@ -29,7 +32,7 @@ type Registry interface {
 }
 
 // NewRegistry returns a new registry
-func NewRegistry(client *datastore.Client, storageClient *storage.PCloudClient) Registry {
+func NewRegistry(client *datastore.Client, storageClient *storage.PCloudClient, email string, password string) Registry {
 	var repository repository.UserRepository
 	if client == nil {
 		repository = persistence.NewInMemoryRepository()
@@ -40,6 +43,8 @@ func NewRegistry(client *datastore.Client, storageClient *storage.PCloudClient) 
 		client:        client,
 		storageClient: storageClient,
 		repository:    repository,
+		email:         email,
+		password:      password,
 	}
 }
 
@@ -63,6 +68,11 @@ func (r *registry) getAuthService() *auth.Auth {
 	return auth.New()
 }
 
+// injecting notification service
+func (r *registry) getNotificationService() service.Notification {
+	return notification.NewNotificationService(r.email, r.password)
+}
+
 // injecting storage service
 func (r *registry) getStorageService() service.Storage {
 	return filestorage.NewPcloudStorage(r.storageClient)
@@ -70,7 +80,7 @@ func (r *registry) getStorageService() service.Storage {
 
 // injecting company use cases
 func (r *registry) newCompanyUseCases() usecase.UseCases {
-	return usecase.New(r.getRepository(), r.getPasswordService(), r.getIDService(), r.getStorageService())
+	return usecase.New(r.getRepository(), r.getPasswordService(), r.getIDService(), r.getStorageService(), r.getNotificationService())
 }
 
 // injecting customer controller

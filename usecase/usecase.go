@@ -25,13 +25,13 @@ type UseCases interface {
 }
 
 // New creates a new use case set
-func New(repository repository.UserRepository, passwordService service.PasswordService, idService service.IDService, storageService service.Storage) UseCases {
+func New(repository repository.UserRepository, passwordService service.PasswordService, idService service.IDService, storageService service.Storage, notificationService service.Notification) UseCases {
 	return &useCases{
 		repository:                 repository,
 		createAccountUseCase:       newCreateAccountUseCase(repository, passwordService, idService),
 		loginUseCase:               newLoginUseCase(repository, passwordService),
 		registerMeasurementUseCase: newRegisterMeasurementUseCase(repository, storageService, idService),
-		requestReportUseCase:       newWeeklyWorkoutReport(repository),
+		requestReportUseCase:       newWeeklyWorkoutReport(repository, notificationService),
 	}
 }
 
