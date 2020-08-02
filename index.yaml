@@ -1,0 +1,7 @@
+indexes:
+
+- kind: measuremnts
+  properties:
+  - name: UserID
+  - name: IssuedAt
+    direction: desc

@@ -117,6 +117,6 @@ func getBodyFatPercentage(bodyMassIndex float64, gender int, birth time.Time) fl
 	yearOfBorn, _, _ := birth.Date()
 	currentYear, _, _ := time.Now().Date()
 	age := currentYear - yearOfBorn
-	bodyFatPercentage := (1.2 * bodyMassIndex) + (0.23 * float64(age)) - (10.8 * float64(gender)) - 5.4 // male 1, female 0
+	bodyFatPercentage := (1.2 * bodyMassIndex) + (0.23 * float64(age)) - (10.8 * float64(gender)) - 5.4 // gender: male 1, female 0
 	return bodyFatPercentage
 }
