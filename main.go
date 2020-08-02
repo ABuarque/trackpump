@@ -36,8 +36,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create storage client, erro %q", err)
 	}
+	email := os.Getenv("EMAIL")
+	if email == "" {
+		log.Fatal("missing EMAIL variable environment")
+	}
+	password := os.Getenv("PASSWORD")
+	if password == "" {
+		log.Fatal("missing PASSWORD environment variable")
+	}
 	e := echo.New()
-	userRegistry := NewRegistry(client, storageClient)
+	userRegistry := NewRegistry(client, storageClient, email, password)
 	usersControllers := userRegistry.NewAppController()
 	e.POST("/api/v1/users", usersControllers.Create)
 	e.POST("/api/v1/users/login", usersControllers.Login)

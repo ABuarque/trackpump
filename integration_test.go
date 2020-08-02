@@ -14,7 +14,7 @@ import (
 )
 
 func TestCreateAccount(t *testing.T) {
-	registry := NewRegistry(nil, nil)
+	registry := NewRegistry(nil, nil, "EMAIL", "PASSWORD")
 	controller := registry.NewAppController()
 	inputUseCase := `{"name":"Aurelio Buarque", "email":"abuarquemf@gmail.com", "password":"123455678", "gender":0, "birth":"1997-11-29", "height":172}`
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(inputUseCase))
@@ -39,7 +39,7 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestCreateAccountWithEmailAlreadyOnDB(t *testing.T) {
-	registry := NewRegistry(nil, nil)
+	registry := NewRegistry(nil, nil, "EMAIL", "PASSWORD")
 	controller := registry.NewAppController()
 	registry.getRepository().Save(&model.User{
 		Email: "abuarquemf@gmail.com",
@@ -64,7 +64,7 @@ func TestCreateAccountWithEmailAlreadyOnDB(t *testing.T) {
 }
 
 func TestLoginWithEmailNotPresentOnDB(t *testing.T) {
-	registry := NewRegistry(nil, nil)
+	registry := NewRegistry(nil, nil, "EMAIL", "PASSWORD")
 	controller := registry.NewAppController()
 	inputUseCase := `{"email":"abuarquemf@gmail.com", "password":"12345678"}`
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(inputUseCase))
@@ -86,7 +86,7 @@ func TestLoginWithEmailNotPresentOnDB(t *testing.T) {
 }
 
 func TestLoginWithEmailPresentOnDB(t *testing.T) {
-	registry := NewRegistry(nil, nil)
+	registry := NewRegistry(nil, nil, "EMAIL", "PASSWORD")
 	controller := registry.NewAppController()
 	registry.getRepository().Save(&model.User{
 		Email:    "abuarquemf@gmail.com",
