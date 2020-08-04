@@ -100,12 +100,12 @@ func getWorkoutReport(lastMeasure, lastButOneMeasure *model.BodyMeasurement, hei
 	if _, err := report.WriteString(fmt.Sprintf("Last thigh measure: %fcm (diff: %fcm)\n", lastMeasure.Thigh, thighDiff)); err != nil {
 		return "", fmt.Errorf("failed to write thight. erro %q", err)
 	}
-	bodyMassIndex := (float64(lastMeasure.Weight) / 1000.0) / (float64(height) * float64(height) / 10000.0) // kg/m^2
-	if _, err := report.WriteString(fmt.Sprintf("BMI: %f (%s)\n", bodyMassIndex, getBodyMassIndexStatus(bodyMassIndex))); err != nil {
+	bodyMassIndexDiff := lastMeasure.BodyMassIndex - lastButOneMeasure.BodyMassIndex
+	if _, err := report.WriteString(fmt.Sprintf("BMI: %f [%s] (%f)\n", lastMeasure.BodyMassIndex, getBodyMassIndexStatus(lastMeasure.BodyMassIndex), bodyMassIndexDiff)); err != nil {
 		return "", fmt.Errorf("failed to write body mass index, erro %q", err)
 	}
-	bodyFatPercentage := getBodyFatPercentage(bodyMassIndex, gender, birth)
-	if _, err := report.WriteString(fmt.Sprintf("Body fat percentage %f%s \n", bodyFatPercentage, "%")); err != nil {
+	bodyFatPercentageDiff := lastMeasure.BodyFatPercentage - lastButOneMeasure.BodyFatPercentage
+	if _, err := report.WriteString(fmt.Sprintf("Body fat percentage %f%s (%f%s) \n", lastMeasure.BodyFatPercentage, "%", bodyFatPercentageDiff, "%")); err != nil {
 		return "", fmt.Errorf("failed to write body fat percentage, erro %q", err)
 	}
 	return report.String(), nil
@@ -123,12 +123,4 @@ func getBodyMassIndexStatus(bodyMassIndex float64) string {
 	} else {
 		return "Severe Obesity"
 	}
-}
-
-func getBodyFatPercentage(bodyMassIndex float64, gender int, birth time.Time) float64 {
-	yearOfBorn, _, _ := birth.Date()
-	currentYear, _, _ := time.Now().Date()
-	age := currentYear - yearOfBorn
-	bodyFatPercentage := (1.2 * bodyMassIndex) + (0.23 * float64(age)) - (10.8 * float64(gender)) - 5.4 // gender: male 1, female 0
-	return bodyFatPercentage
 }

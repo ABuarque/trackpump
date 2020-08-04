@@ -80,6 +80,8 @@ func (r *registerMeasurement) register(input *RegisterMeasurementInput) error {
 	if err != nil {
 		return exception.New(exception.ProcessmentError, "failed to generate user id", err)
 	}
+	bodyMassIndex := (float64(input.Weight) / 1000.0) / (float64(user.Height) * float64(user.Height) / 10000.0) // kg/m^2
+	bodyFatPercentage := getBodyFatPercentage(bodyMassIndex, user.Gender, user.Birth)
 	bodyMeasurement := model.BodyMeasurement{
 		UserID:                 user.ID,
 		ID:                     id,
@@ -94,6 +96,8 @@ func (r *registerMeasurement) register(input *RegisterMeasurementInput) error {
 		Thigh:                  input.Thigh,
 		FrontalPicture:         frontalPictureURL,
 		SidePicture:            sidePictureURL,
+		BodyFatPercentage:      bodyFatPercentage,
+		BodyMassIndex:          bodyMassIndex,
 	}
 	if _, err := r.repository.SaveMeasurement(&bodyMeasurement); err != nil {
 		return exception.New(exception.ProcessmentError, "failed to save user measurement", err)
@@ -103,4 +107,12 @@ func (r *registerMeasurement) register(input *RegisterMeasurementInput) error {
 
 func timeToString(t time.Time) string {
 	return t.Format("2006-01-02T15:04:05")
+}
+
+func getBodyFatPercentage(bodyMassIndex float64, gender int, birth time.Time) float64 {
+	yearOfBorn, _, _ := birth.Date()
+	currentYear, _, _ := time.Now().Date()
+	age := currentYear - yearOfBorn
+	bodyFatPercentage := (1.2 * bodyMassIndex) + (0.23 * float64(age)) - (10.8 * float64(gender)) - 5.4 // gender: male 1, female 0
+	return bodyFatPercentage
 }
