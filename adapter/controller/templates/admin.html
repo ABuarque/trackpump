@@ -16,6 +16,47 @@
             <input type="submit" value="Collect new measurement" style="align-self: center;">
         </p>
     </form>
+    <canvas id="myChart" width="0" height="20"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+        integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg=="
+        crossorigin="anonymous"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var d = [{{ .BodyFatPercentages }}];
+	console.log(d);
+	new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [{{ range .Labels }} {{ . }}, {{ end }}],
+                datasets: [
+                    {
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        label: "%BF",
+                        data: [{{ range .BodyFatPercentages }} {{ . }}, {{ end }}],
+                    },
+                    {
+                        borderColor: [
+                            'rgba(90, 80, 21, 2)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        label: "BMI",
+                        data: [{{ range .BodyMasIndexes }} {{ . }}, {{ end }}],
+                    }
+                ],
+            },
+        });
+    </script>
 </body>
 
 </html>

@@ -11,6 +11,7 @@ type useCases struct {
 	loginUseCase               loginUseCase
 	registerMeasurementUseCase registerMeasurementUseCase
 	requestReportUseCase       requestReportUseCase
+	loadProfileUseCase         loadProfileUseCase
 }
 
 // UseCases defines the possible use cases
@@ -22,6 +23,8 @@ type UseCases interface {
 	RegisterMeasurement(input *RegisterMeasurementInput) error
 
 	RequestWeeklyReport() error
+
+	LoadProfile(input *LoadProfileInput) (*LoadProfileOutput, error)
 }
 
 // New creates a new use case set
@@ -32,6 +35,7 @@ func New(repository repository.UserRepository, passwordService service.PasswordS
 		loginUseCase:               newLoginUseCase(repository, passwordService),
 		registerMeasurementUseCase: newRegisterMeasurementUseCase(repository, storageService, idService),
 		requestReportUseCase:       newWeeklyWorkoutReport(repository, notificationService),
+		loadProfileUseCase:         newLoadProfileUseCase(repository),
 	}
 }
 
@@ -49,4 +53,8 @@ func (u *useCases) RegisterMeasurement(input *RegisterMeasurementInput) error {
 
 func (u *useCases) RequestWeeklyReport() error {
 	return u.requestReportUseCase.process()
+}
+
+func (u *useCases) LoadProfile(input *LoadProfileInput) (*LoadProfileOutput, error) {
+	return u.loadProfileUseCase.load(input)
 }
