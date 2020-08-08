@@ -19,4 +19,7 @@ type UserRepository interface {
 	// The returned list containes only two elements whose are the last and
 	// last but one measurements (ON THAT ORDER!)
 	FindLastTwoMeasurements(userID string) ([]*model.BodyMeasurement, error)
+
+	// It returns a list sorted by -issuedAt
+	FindMeasurementsForProfile(userID string) ([]*model.BodyMeasurement, error)
 }

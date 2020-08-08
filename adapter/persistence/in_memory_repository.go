@@ -7,6 +7,10 @@ import (
 	"trackpump/domain/repository"
 )
 
+const (
+	lastMeasurements = 8
+)
+
 type inMemoryRepository struct {
 	db                     map[string]*model.User
 	measurementsCollection map[string]*model.BodyMeasurement
@@ -77,4 +81,24 @@ func (im *inMemoryRepository) FindLastTwoMeasurements(userID string) ([]*model.B
 		return []*model.BodyMeasurement{temporarySlice[0], temporarySlice[1]}, nil
 	}
 	return make([]*model.BodyMeasurement, 0), nil
+}
+
+func (im *inMemoryRepository) FindMeasurementsForProfile(userID string) ([]*model.BodyMeasurement, error) {
+	var temporarySlice []*model.BodyMeasurement
+	for _, m := range im.measurementsCollection {
+		temporarySlice = append(temporarySlice, m)
+	}
+	sort.Slice(temporarySlice, func(i, j int) bool {
+		return temporarySlice[i].IssuedAt.After(temporarySlice[j].IssuedAt)
+	})
+	counter := 0
+	var toReturn []*model.BodyMeasurement
+	for {
+		toReturn = append(toReturn, temporarySlice[counter])
+		counter++
+		if counter >= lastMeasurements {
+			break
+		}
+	}
+	return toReturn, nil
 }

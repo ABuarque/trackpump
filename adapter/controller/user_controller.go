@@ -219,12 +219,30 @@ func (u *userController) Admin(c echo.Context) error {
 	if err != nil {
 		return c.HTML(http.StatusInternalServerError, fmt.Sprintf("<h1>Error on auth: %s</h1>", err.Error()))
 	}
+	in := usecase.LoadProfileInput{
+		ID: claims["id"],
+	}
+	res, err := u.useCases.LoadProfile(&in)
+	if err != nil {
+		var e *exception.Error
+		if errors.As(err, &e) {
+			log.Println(e.Err)
+			return c.JSON(e.Code, e)
+		}
+		return c.JSON(http.StatusInternalServerError, err)
+	}
 	state := struct {
-		Email         string
-		Authorization string
+		Email              string
+		Authorization      string
+		Labels             []string
+		BodyFatPercentages []float64
+		BodyMasIndexes     []float64
 	}{
 		claims["email"],
 		token,
+		res.Labels,
+		res.BodyFatPercentages,
+		res.BodyMassIndexes,
 	}
 	tmpl := template.Must(template.ParseFiles(templatesPath + "admin.html"))
 	var html bytes.Buffer
