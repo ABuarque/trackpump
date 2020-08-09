@@ -97,7 +97,7 @@ func (dr *datastoreRepository) FindLastTwoMeasurements(userID string) ([]*model.
 
 func (dr *datastoreRepository) FindMeasurementsForProfile(userID string) ([]*model.BodyMeasurement, error) {
 	var entities []*model.BodyMeasurement
-	q := datastore.NewQuery(measurementsCollection).Filter("UserID=", userID).Order("-IssuedAt").Limit(8)
+	q := datastore.NewQuery(measurementsCollection).Filter("UserID=", userID).Order("IssuedAt").Limit(8)
 	if _, err := dr.client.GetAll(context.Background(), q, &entities); err != nil {
 		return nil, fmt.Errorf("failedt to fetch last two measurements on collection %s, error %q", usersCollection, err)
 	}

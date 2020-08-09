@@ -89,7 +89,7 @@ func (im *inMemoryRepository) FindMeasurementsForProfile(userID string) ([]*mode
 		temporarySlice = append(temporarySlice, m)
 	}
 	sort.Slice(temporarySlice, func(i, j int) bool {
-		return temporarySlice[i].IssuedAt.After(temporarySlice[j].IssuedAt)
+		return temporarySlice[i].IssuedAt.Before(temporarySlice[j].IssuedAt)
 	})
 	counter := 0
 	var toReturn []*model.BodyMeasurement
