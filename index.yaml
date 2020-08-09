@@ -5,3 +5,9 @@ indexes:
   - name: UserID
   - name: IssuedAt
     direction: desc
+
+- kind: measuremnts
+  properties:
+  - name: UserID
+  - name: IssuedAt
+    
