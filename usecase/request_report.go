@@ -69,43 +69,43 @@ func (rr *requestReport) process() error {
 func getWorkoutReport(lastMeasure, lastButOneMeasure *model.BodyMeasurement, height, gender int, birth time.Time) (string, error) {
 	var report strings.Builder
 	weightDiff := (lastMeasure.Weight - lastButOneMeasure.Weight) / float64(1000) // converting to Kg
-	if _, err := report.WriteString(fmt.Sprintf("Last weight: %fkg (diff: %fkg)\n", float64(lastMeasure.Weight)/1000.0, weightDiff)); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("Last weight: %.2fkg (diff: %.2fkg)\n", float64(lastMeasure.Weight)/1000.0, weightDiff)); err != nil {
 		return "", fmt.Errorf("failed to write weight, erro %q", err)
 	}
 	abdominalCircunferenceDiff := lastMeasure.AbdominalCircunference - lastButOneMeasure.AbdominalCircunference // in cm
-	if _, err := report.WriteString(fmt.Sprintf("Last abdominal circunference: %fcm (diff: %fcm)\n", lastMeasure.AbdominalCircunference, abdominalCircunferenceDiff)); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("Last abdominal circunference: %fcm (diff: %.2fcm)\n", lastMeasure.AbdominalCircunference, abdominalCircunferenceDiff)); err != nil {
 		return "", fmt.Errorf("failed to write abdominal circunference. erro %q", err)
 	}
 	armDiff := lastMeasure.Arm - lastButOneMeasure.Arm // in cm
-	if _, err := report.WriteString(fmt.Sprintf("Last arm measure: %fcm (diff: %fcm)\n", lastMeasure.Arm, armDiff)); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("Last arm measure: %fcm (diff: %.2fcm)\n", lastMeasure.Arm, armDiff)); err != nil {
 		return "", fmt.Errorf("failed to write arm. erro %q", err)
 	}
 	forearmDiff := lastMeasure.Forearm - lastButOneMeasure.Forearm // in cm
-	if _, err := report.WriteString(fmt.Sprintf("Last forearm measure: %fcm (diff: %fcm)\n", lastMeasure.Forearm, forearmDiff)); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("Last forearm measure: %fcm (diff: %.2fcm)\n", lastMeasure.Forearm, forearmDiff)); err != nil {
 		return "", fmt.Errorf("failed to write forearm. erro %q", err)
 	}
 	calfDiff := lastMeasure.Calf - lastButOneMeasure.Calf // in cm
-	if _, err := report.WriteString(fmt.Sprintf("Last calf measure: %fcm (diff: %fcm)\n", lastMeasure.Calf, calfDiff)); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("Last calf measure: %fcm (diff: %.2fcm)\n", lastMeasure.Calf, calfDiff)); err != nil {
 		return "", fmt.Errorf("failed to write calf. erro %q", err)
 	}
 	neckDiff := lastMeasure.Neck - lastButOneMeasure.Neck // in cm
-	if _, err := report.WriteString(fmt.Sprintf("Last neck measure: %fcm (diff: %fcm)\n", lastMeasure.Neck, neckDiff)); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("Last neck measure: %fcm (diff: %.2fcm)\n", lastMeasure.Neck, neckDiff)); err != nil {
 		return "", fmt.Errorf("failed to write neck. erro %q", err)
 	}
 	hipDiff := lastMeasure.Hip - lastButOneMeasure.Hip // in cm
-	if _, err := report.WriteString(fmt.Sprintf("Last hip measure: %fcm (diff: %fcm)\n", lastMeasure.Hip, hipDiff)); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("Last hip measure: %fcm (diff: %.2fcm)\n", lastMeasure.Hip, hipDiff)); err != nil {
 		return "", fmt.Errorf("failed to write hip. erro %q", err)
 	}
 	thighDiff := lastMeasure.Thigh - lastButOneMeasure.Thigh // in cm
-	if _, err := report.WriteString(fmt.Sprintf("Last thigh measure: %fcm (diff: %fcm)\n", lastMeasure.Thigh, thighDiff)); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("Last thigh measure: %fcm (diff: %.2fcm)\n", lastMeasure.Thigh, thighDiff)); err != nil {
 		return "", fmt.Errorf("failed to write thight. erro %q", err)
 	}
 	bodyMassIndexDiff := lastMeasure.BodyMassIndex - lastButOneMeasure.BodyMassIndex
-	if _, err := report.WriteString(fmt.Sprintf("BMI: %f [%s] (%f)\n", lastMeasure.BodyMassIndex, getBodyMassIndexStatus(lastMeasure.BodyMassIndex), bodyMassIndexDiff)); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("BMI: %.2f [%s] (%.2f)\n", lastMeasure.BodyMassIndex, getBodyMassIndexStatus(lastMeasure.BodyMassIndex), bodyMassIndexDiff)); err != nil {
 		return "", fmt.Errorf("failed to write body mass index, erro %q", err)
 	}
 	bodyFatPercentageDiff := lastMeasure.BodyFatPercentage - lastButOneMeasure.BodyFatPercentage
-	if _, err := report.WriteString(fmt.Sprintf("Body fat percentage %f%s (%f%s) \n", lastMeasure.BodyFatPercentage, "%", bodyFatPercentageDiff, "%")); err != nil {
+	if _, err := report.WriteString(fmt.Sprintf("Body fat percentage %.2f%s (%.2f%s) \n", lastMeasure.BodyFatPercentage, "%", bodyFatPercentageDiff, "%")); err != nil {
 		return "", fmt.Errorf("failed to write body fat percentage, erro %q", err)
 	}
 	return report.String(), nil
